@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 23:18:37 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/20 22:51:29 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 05:11:59 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,32 @@
 AForm::AForm(const std::string name, const int rS, const int rE) : name(name), required_s(rS), required_e(rE)
 {
     this->sign = 0;
-    std::cout << "AForm constructer called" << std::endl;
 }
 
-AForm::AForm(const AForm &src) : name(src.getName()), required_e(src.getRequiredE()), required_s(src.getRequiredS()), sign(src.getSigned())
+AForm::AForm(const AForm &src) : name(src.name), required_s(src.required_s), required_e(src.required_e), sign(src.sign)
 {
-    std::cout << "AForm copy constructer called" << std::endl;
 }
-
-
 AForm::~AForm(void)
 {
-    std::cout << "AForm destructeur called" << std::endl;
+}
+
+AForm &AForm::operator=(const AForm &src)
+{
+    if (&src != this)
+    {
+        this->setName(src.getName());
+        this->setSigned(src.getSigned());
+        this->setRequiredE(src.getRequiredE());
+        this->setRequiredS(src.getRequiredS());
+
+    }
+    return (*this);
+}
+
+std::ostream &operator<<(std::ostream & os,AForm &F)
+{
+    os << F.getName() << ", required for sign = " << F.getRequiredS()<< ", required for execute = " << F.getRequiredE() << ", signed = " << F.getSigned();
+    return os;
 }
 
 bool AForm::getSigned() const
@@ -46,25 +60,39 @@ const int    AForm::getRequiredS() const
     return this->required_s;
 }
 
-void AForm::BeSigned(Bureaucrat &B)
+void AForm::setSigned(const bool sign)
 {
-    try
-    {
-        if (this->required_s < B.getGrade())
-            throw GradeTooLowException();
-    }
-    catch (const AForm::GradeTooLowException& e)
-    {
-        std::cerr << "Error : " << e.what() << std::endl;
-        return ;
-    }
-    if (this->sign == 0)
-    {
-        this->sign = 1;
-        B.signForm(this->name);
-    }
+    this->sign = sign;
+}
+void AForm::setName(const std::string name)
+{
+    const_cast<std::string&>(this->name) = name;
+}
+void AForm::setRequiredE(const int e)
+{
+    if (e < 1)
+        throw (AForm::GradeTooHighException());
+    else if (e > 150)
+        throw (AForm::GradeTooLowException());
+    const_cast<int&>(this->required_e) = e;
+}
+void AForm::setRequiredS(const int s)
+{
+    if (s < 1)
+        throw (AForm::GradeTooHighException());
+    else if (s > 150)
+        throw (AForm::GradeTooLowException());
+    const_cast<int&>(this->required_s) = s;
 }
 
+void AForm::BeSigned(Bureaucrat &B)
+{
+    if (this->required_s < B.getGrade())
+        throw (AForm::GradeTooLowException());
+    if (this->sign == 1)
+        throw (AForm::isAlreadySigned());
+    this->sign = 1;
+}
 const char* AForm::GradeTooHighException::what() const throw()
 {
     return "Grade is too high";
@@ -73,40 +101,20 @@ const char* AForm::GradeTooLowException::what() const throw()
 {
     return "Grade is too low";
 }
-
+const char* AForm::isAlreadySigned::what() const throw()
+{
+    return "Is already signed.";
+}
 const char* AForm::NotSign::what() const throw()
 {
     return "form is not signed";
 }
-std::ostream &operator<<(std::ostream & os, AForm &F)
-{
-    os << F.getName() << ", required for sign = " << F.getRequiredS()<< ", required for execute = " << F.getRequiredE() << ", signed = " << F.getSigned();
-    return os;
-}
 
 void AForm::execute(Bureaucrat const & executor) const
 {
-    try
-    {
-        if (this->required_e < executor.getGrade())
-            throw GradeTooLowException();
-    }
-    catch (const AForm::GradeTooLowException& e)
-    {
-        std::cerr << "Error : " << e.what() << std::endl;
-        return ;
-    }
-
-    try
-    {
-        if (this->required_e < executor.getGrade())
-            throw NotSign();
-    }
-    catch (const AForm::GradeTooLowException& e)
-    {
-        std::cerr << "Error : " << e.what() << std::endl;
-        return ;
-    }
+    if (this->required_e < executor.getGrade())
+            throw (AForm::GradeTooLowException());
+    if (this->sign == 0)
+            throw (AForm::NotSign());
     this->action();
-    executor.executeForm(*this);
 }

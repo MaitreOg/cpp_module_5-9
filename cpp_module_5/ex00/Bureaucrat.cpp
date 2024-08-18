@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:03:05 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/19 23:10:49 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 03:39:28 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,30 @@ catch (const Bureaucrat::GradeTooLowException& e)
         std::cerr << "Error : " << e.what() << std::endl;
     }
     this->grade = grade;
-    std::cout << "Bureaucrat constructer called" << std::endl;
 }
 
-Bureaucrat::Bureaucrat(const Bureaucrat &src) : name(src.getName()), grade(src.getGrade())
+Bureaucrat::Bureaucrat(const Bureaucrat &src)
 {
-    std::cout << "Bureaucrat copy constructer called" << std::endl;
+    if (&src != this)
+        *this = src;
 }
 
+Bureaucrat &Bureaucrat::operator=(const Bureaucrat &src)
+{
+    if (&src != this)
+    {
+        this->setName(src.name);
+        this->grade = src.grade;
+    }
+    return (*this);
+}
 
 Bureaucrat::~Bureaucrat(void)
 {
-    std::cout << "Bureaucrat destructeur called" << std::endl;
+}
+void    Bureaucrat::setName(const std::string str)
+{
+    const_cast<std::string&>(this->name) = str;
 }
 
 int Bureaucrat::getGrade() const

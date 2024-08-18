@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 21:19:47 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/25 21:42:21 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 22:44:48 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void swap(T &a, T &b)
 
 int main( void ) 
 {
-	int a = 2;
-	int b = 3;
+	float a = 2.43;
+	float b = 3.17;
 	::swap( a, b );
 	std::cout << "a = " << a << ", b = " << b << std::endl;
 	std::cout << "min( a, b ) = " << ::min( a, b ) << std::endl;

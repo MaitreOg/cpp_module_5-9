@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:41:54 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/20 23:09:19 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 05:45:01 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,21 @@
 
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string target) : AForm(target + "_Shruberry", 145, 137), target(target)
 {
-    
-    std::cout << "Shrubbery constructer called" << std::endl; 
 }
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &src)  : AForm(src.getName(), 145, 137), target(src.getTarget())
 {
-    std::cout << "Shrubbery copy constructer called" << std::endl; 
 }
 
 ShrubberyCreationForm::~ShrubberyCreationForm(void)
 {
-    std::cout << "Shrubbery destructor called" << std::endl; 
 }
 ShrubberyCreationForm &ShrubberyCreationForm::operator=(ShrubberyCreationForm &src)
 {
-    this->target = src.target;
-    this->name = src.name;
-    this->sign = src.sign;
+    if (&src != this)
+    {
+        AForm::operator=(src);
+        this->target = src.target;
+    }
     return *this;
 }
 void ShrubberyCreationForm::action() const

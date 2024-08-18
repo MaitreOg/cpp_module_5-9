@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 22:51:48 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/25 14:11:24 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 07:41:35 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,29 @@ void identify(Base* p)
         std::cout << "type is B" << std::endl;
     else if (C* ptr = dynamic_cast<C*>(p))
         std::cout << "type is C" << std::endl;
+    else
+        std::cout << "type is Unknow" << std::endl;
 }
 
 
 void identify(Base& p)
 {
-    if (dynamic_cast<A*>(&p) != NULL)
-        std::cout << "type is A" << std::endl;
-    else if (dynamic_cast<B*>(&p) != NULL)
-        std::cout << "type is B" << std::endl;
-    else if (dynamic_cast<C*>(&p) != NULL)
-        std::cout << "type is C" << std::endl;
+    try
+    {
+        if (dynamic_cast<A*>(&p) != NULL)
+            std::cout << "type is A" << std::endl;
+        else if (dynamic_cast<B*>(&p) != NULL)
+         std::cout << "type is B" << std::endl;
+        else if (dynamic_cast<C*>(&p) != NULL)
+            std::cout << "type is C" << std::endl;
+        else
+            std::cout << "type is Unknow" << std::endl;
+    }
+    catch (const std::bad_cast &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+
 }
 
 int main()

@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 20:50:45 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/24 20:32:50 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 07:27:41 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ void ScalarConverter::convert(std::string literal)
     int i = 0;
     bool f= 0;
  
- 
-   if (literal == "-inf")
+    if (literal.size() == 1 && literal[i] >= 32 && literal[i] < 48 || literal[i] > 57 && literal[i] <= 126)
+        literal = std::to_string(static_cast<int>(literal[0]));
+    if (literal == "-inf")
     {
         std::cout << "char : Non displayable" << std::endl;
         std::cout << "int : -inf"  << std::endl;
@@ -53,7 +54,7 @@ void ScalarConverter::convert(std::string literal)
         return ;
     }
    
-   while (literal[i])
+    while (literal[i])
     {
         if ((literal[i] < '0' || literal[i] > '9') && literal[i] != '.')
             f = 1;
@@ -64,6 +65,8 @@ void ScalarConverter::convert(std::string literal)
        literal[i - 1] = 0;
         f = 0;
     }
+    if (literal.size() > 15 || std::stol(literal) > 2147483647)
+        f = 1;
     if (f == 1)
     {
         std::cout << "char : impossible" << std::endl;
@@ -72,11 +75,9 @@ void ScalarConverter::convert(std::string literal)
         std::cout << "double : nan" << std::endl;
         return ;
     }
-
- 
- 
     f = 0;
     i = 0;
+
     if (std::stoi(literal) <= 126 && std::stoi(literal) >= 32)
         std::cout << "char : '" << static_cast<char>(std::stoi(literal)) << "'" << std::endl;
     else

@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:02:55 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/20 20:53:34 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 05:03:02 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <exception>
 #include <string>
+#include "AForm.hpp"
 class AForm;
 
 class   Bureaucrat
@@ -27,14 +28,20 @@ public:
     Bureaucrat(const std::string name, int grade);
     Bureaucrat(const Bureaucrat &src);
     ~Bureaucrat(void);
+    
+    
+    friend std::ostream &operator<<(std::ostream & os,Bureaucrat &B);
+    Bureaucrat &operator=(const Bureaucrat &src);
+    
+    void setName(const std::string str);
     int getGrade() const;
     const std::string getName() const;
+    
     void    promote();
     void    regress();
-    void    signForm(const std::string name);
+    void    signForm(AForm &form);
     void    executeForm(AForm const & form) const;
-    friend std::ostream &operator<<(std::ostream & os,Bureaucrat &B);
-    
+   
     class GradeTooHighException : public std::exception
     {
     public:

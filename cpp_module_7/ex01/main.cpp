@@ -6,7 +6,7 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 21:49:56 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/26 14:55:20 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 22:52:13 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void print_tab(T a)
 {
     std::cout << a << std::endl;
 }
+
 int main( void ) 
 {
 	int len = 3;

@@ -6,58 +6,85 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:03:09 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/20 23:11:09 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 06:25:40 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
+#include "PresidentialPardonForm.hpp"
+#include "RobotomyRequestForm.hpp"
 
 int main()
 {
-    Bureaucrat *Sam = new Bureaucrat("Sam", 1);
-    Bureaucrat *Pa = new Bureaucrat("Pa", 26);
-    AForm   *dossier = new ShrubberyCreationForm("secrets");
-    AForm   *dossier2 = new ShrubberyCreationForm("public");
-    
-    std::cout << *Sam << std::endl;
-    std::cout << *Pa << std::endl;
+	try
+	{
+		Bureaucrat Sam("Sam", 1);
+		Bureaucrat Pa("Pa", 26);
+		ShrubberyCreationForm dossier1("secrets");
+		ShrubberyCreationForm dossier2("public");
+	
+		std::cout << Sam << std::endl;
+		std::cout << Pa << std::endl;
 
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
+		std::cout << std::endl;
+
+		Pa.promote();
+		std::cout << Pa << std::endl;
+		Pa.signForm(dossier2);
+		Sam.signForm(dossier1);
+
+		std::cout << std::endl;
+		
+		Sam.executeForm(dossier1);
+		Pa.executeForm(dossier2);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	
+	std::cout << std::endl << std::endl << std::endl;
+
+	try
+	{
+		Bureaucrat Sam("Sam", 1);
+
+		PresidentialPardonForm dossier1("Sam$");
+		PresidentialPardonForm dossier2("Not sam ...");
+		dossier2 = dossier1;
+
+		Sam.signForm(dossier2);
+		Sam.executeForm(dossier2);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	std::cout << std::endl << std::endl << std::endl;
+
+	try
+	{
+		Bureaucrat Sam("Sam", 1);
+		Bureaucrat Pa("Pa", 150);
+
+		RobotomyRequestForm dossier("cyborg");
+
+		Sam.signForm(dossier);
+		Sam.executeForm(dossier);
+		Pa.executeForm(dossier);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	std::cout << std::endl << std::endl << std::endl;
 
 
-    dossier2->BeSigned(*Pa);
-    Pa->promote();
-    std::cout << *Pa << std::endl;
-    dossier2->BeSigned(*Pa);
-    dossier->BeSigned(*Sam);
-
-    std::cout << std::endl;
-    std::cout << std::endl;
-
-    dossier->execute(*Sam);
-    dossier2->execute(*Pa);
-
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
-
-
-    std::cout << *dossier << std::endl;
-    std::cout << *dossier2 << std::endl;
-    dossier2 = dossier;
-    std::cout << *dossier2 << std::endl;
-
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
-    
-    
-    delete Sam;
-    delete Pa;
-    delete dossier;
-    return (0);
+	
+	
+	return (0);
 }

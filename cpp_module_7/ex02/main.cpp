@@ -6,37 +6,60 @@
 /*   By: smarty <smarty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:04:20 by smarty            #+#    #+#             */
-/*   Updated: 2024/04/27 17:53:30 by smarty           ###   ########.fr       */
+/*   Updated: 2024/08/18 23:13:32 by smarty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <iostream>
 #include "Array.hpp"
-#include "Array.tpp"
 
-int main()
+#define MAX_VAL 50
+int main(int, char**)
 {
-    
-    Array<int>* tab = new Array<int>(6);
-    Array<int>* tab2 = new Array<int>(1);
+    Array<int> numbers(MAX_VAL);
+    int* mirror = new int[MAX_VAL];
+    srand(time(NULL));
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        const int value = rand();
+        numbers[i] = value;
+        mirror[i] = value;
+    }
+    //SCOPE
+    {
+        Array<int> tmp = numbers;
+        Array<int> test(tmp);
+    }
+
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        if (mirror[i] != numbers[i])
+        {
+            std::cerr << "didn't save the same value!!" << std::endl;
+            return 1;
+        }
+    }
     try
     {
-        std::cout << tab2->size() << std::endl;
-        std::cout << (*tab2)[3] << std::endl;
+        numbers[-2] = 0;
     }
-    catch (const Array<int>::outBound& e)
+    catch(const std::exception& e)
     {
-        std::cerr << "Caught Exception: " << e.what() << std::endl;
+        std::cerr << e.what() << '\n';
     }
-    tab2 = tab;
     try
     {
-        std::cout << tab2->size() << std::endl;
-        std::cout << (*tab2)[3] << std::endl;
+        numbers[MAX_VAL] = 0;
     }
-        catch (const Array<int>::outBound& e)
+    catch(const std::exception& e)
     {
-        std::cerr << "Caught Exception: " << e.what() << std::endl;
+        std::cerr << e.what() << '\n';
     }
-    delete tab2;
+
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        numbers[i] = rand();
+    }
+    delete [] mirror;//
     return 0;
 }
